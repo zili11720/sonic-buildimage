@@ -1,0 +1,134 @@
+From 45185cffa86fac1532ba14d280d91be6cfb8cc78 Mon Sep 17 00:00:00 2001
+From: jcaiMR <jcai@microsoft.com>
+Date: Fri, 25 Aug 2023 16:07:55 +0000
+Subject: [PATCH] bgpd: avoid notify race between io and main pthreads
+
+---
+ bgpd/bgp_io.c     | 17 ++++++++---------
+ bgpd/bgp_packet.c | 32 ++++++++++++++++++++++++++++----
+ bgpd/bgp_packet.h |  2 ++
+ 3 files changed, 38 insertions(+), 13 deletions(-)
+
+diff --git a/bgpd/bgp_io.c b/bgpd/bgp_io.c
+index 4190b1851..9fd0dc548 100644
+--- a/bgpd/bgp_io.c
++++ b/bgpd/bgp_io.c
+@@ -38,7 +38,7 @@
+ #include "bgpd/bgp_debug.h"	// for bgp_debug_neighbor_events, bgp_type_str
+ #include "bgpd/bgp_errors.h"	// for expanded error reference information
+ #include "bgpd/bgp_fsm.h"	// for BGP_EVENT_ADD, bgp_event
+-#include "bgpd/bgp_packet.h"	// for bgp_notify_send_with_data, bgp_notify...
++#include "bgpd/bgp_packet.h"	// for bgp_notify_io_invalid...
+ #include "bgpd/bgpd.h"		// for peer, BGP_MARKER_SIZE, bgp_master, bm
+ /* clang-format on */
+ 
+@@ -516,8 +516,8 @@ static bool validate_header(struct peer *peer)
+ 		return false;
+ 
+ 	if (memcmp(m_correct, m_rx, BGP_MARKER_SIZE) != 0) {
+-		bgp_notify_send(peer, BGP_NOTIFY_HEADER_ERR,
+-				BGP_NOTIFY_HEADER_NOT_SYNC);
++		bgp_notify_io_invalid(peer, BGP_NOTIFY_HEADER_ERR,
++				      		  BGP_NOTIFY_HEADER_NOT_SYNC, NULL, 0);
+ 		return false;
+ 	}
+ 
+@@ -537,9 +537,8 @@ static bool validate_header(struct peer *peer)
+ 			zlog_debug("%s unknown message type 0x%02x", peer->host,
+ 				   type);
+ 
+-		bgp_notify_send_with_data(peer, BGP_NOTIFY_HEADER_ERR,
+-					  BGP_NOTIFY_HEADER_BAD_MESTYPE, &type,
+-					  1);
++		bgp_notify_io_invalid(peer, BGP_NOTIFY_HEADER_ERR,
++				              BGP_NOTIFY_HEADER_BAD_MESTYPE, &type, 1);
+ 		return false;
+ 	}
+ 
+@@ -564,9 +563,9 @@ static bool validate_header(struct peer *peer)
+ 
+ 		uint16_t nsize = htons(size);
+ 
+-		bgp_notify_send_with_data(peer, BGP_NOTIFY_HEADER_ERR,
+-					  BGP_NOTIFY_HEADER_BAD_MESLEN,
+-					  (unsigned char *)&nsize, 2);
++		bgp_notify_io_invalid(peer, BGP_NOTIFY_HEADER_ERR,
++				      		  BGP_NOTIFY_HEADER_BAD_MESLEN,
++				      		  (unsigned char *)&nsize, 2);
+ 		return false;
+ 	}
+ 
+diff --git a/bgpd/bgp_packet.c b/bgpd/bgp_packet.c
+index 2c8a375a5..da1cd9370 100644
+--- a/bgpd/bgp_packet.c
++++ b/bgpd/bgp_packet.c
+@@ -677,8 +677,9 @@ static void bgp_write_notify(struct peer *peer)
+  * @param data      Data portion
+  * @param datalen   length of data portion
+  */
+-void bgp_notify_send_with_data(struct peer *peer, uint8_t code,
+-			       uint8_t sub_code, uint8_t *data, size_t datalen)
++static void bgp_notify_send_internal(struct peer *peer, uint8_t code,
++				     				 uint8_t sub_code, uint8_t *data,
++				     				 size_t datalen, bool use_curr)
+ {
+ 	struct stream *s;
+ 
+@@ -710,8 +711,11 @@ void bgp_notify_send_with_data(struct peer *peer, uint8_t code,
+ 	 * If possible, store last packet for debugging purposes. This check is
+ 	 * in place because we are sometimes called with a doppelganger peer,
+ 	 * who tends to have a plethora of fields nulled out.
++	 *
++	 * Some callers should not attempt this - the io pthread for example
++	 * should not touch internals of the peer struct.
+ 	 */
+-	if (peer->curr) {
++	if (use_curr && peer->curr) {
+ 		size_t packetsize = stream_get_endp(peer->curr);
+ 		assert(packetsize <= sizeof(peer->last_reset_cause));
+ 		memcpy(peer->last_reset_cause, peer->curr->data, packetsize);
+@@ -794,7 +798,27 @@ void bgp_notify_send_with_data(struct peer *peer, uint8_t code,
+  */
+ void bgp_notify_send(struct peer *peer, uint8_t code, uint8_t sub_code)
+ {
+-	bgp_notify_send_with_data(peer, code, sub_code, NULL, 0);
++	bgp_notify_send_internal(peer, code, sub_code, NULL, 0, true);
++}
++
++/*
++ * Enqueue notification; called from the main pthread, peer object access is ok.
++ */
++void bgp_notify_send_with_data(struct peer *peer, uint8_t code,
++			       uint8_t sub_code, uint8_t *data, size_t datalen)
++{
++	bgp_notify_send_internal(peer, code, sub_code, data, datalen, true);
++}
++
++/*
++ * For use by the io pthread, queueing a notification but avoiding access to
++ * the peer object.
++ */
++void bgp_notify_io_invalid(struct peer *peer, uint8_t code, uint8_t sub_code,
++			   uint8_t *data, size_t datalen)
++{
++	/* Avoid touching the peer object */
++	bgp_notify_send_internal(peer, code, sub_code, data, datalen, false);
+ }
+ 
+ /*
+diff --git a/bgpd/bgp_packet.h b/bgpd/bgp_packet.h
+index 48de9d9cb..79210567f 100644
+--- a/bgpd/bgp_packet.h
++++ b/bgpd/bgp_packet.h
+@@ -62,6 +62,8 @@ extern void bgp_open_send(struct peer *);
+ extern void bgp_notify_send(struct peer *, uint8_t, uint8_t);
+ extern void bgp_notify_send_with_data(struct peer *, uint8_t, uint8_t,
+ 				      uint8_t *, size_t);
++void bgp_notify_io_invalid(struct peer *peer, uint8_t code, uint8_t sub_code,
++						   uint8_t *data, size_t datalen);
+ extern void bgp_route_refresh_send(struct peer *, afi_t, safi_t, uint8_t,
+ 				   uint8_t, int);
+ extern void bgp_capability_send(struct peer *, afi_t, safi_t, int, int);
+-- 
+2.25.1
+

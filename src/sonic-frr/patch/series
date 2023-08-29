@@ -7,3 +7,4 @@
 0008-Add-support-of-bgp-l3vni-evpn.patch
 0009-ignore-route-from-default-table.patch
 0010-bgpd-change-log-level-of-graceful-restart-events-to-info.patch
+0011-bgpd-avoid-notify-race-between-io-and-main-pthreads.patch
