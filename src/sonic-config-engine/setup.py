@@ -20,10 +20,10 @@ dependencies = [
 if sys.version_info.major == 3:
     # Python 3-only dependencies
     dependencies += [
-        # pyangbind v0.8.1 pull down enum43 which causes 're' package to malfunction.
+        # pyangbind v0.8.2 pull down enum43 which causes 're' package to malfunction.
         # Python3 has enum module and so pyangbind should be installed outside
         # dependencies section of setuptools followed by uninstall of enum43
-        # 'pyangbind==0.8.1',
+        # 'pyangbind==0.8.2',
         'Jinja2>=2.10',
         'pyyaml==6.0.1',
     ]
