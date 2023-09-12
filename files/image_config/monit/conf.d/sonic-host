@@ -31,6 +31,13 @@ check program routeCheck with path "/usr/bin/route_check.py"
     every 5 cycles
     if status != 0 for 3 cycle then alert repeat every 1 cycles
 
+# Runs only on multi-asic platforms. Checks if RX_ERR > 0 on any of the internal links. If found,
+# 1. script generates a CRIT error syslog
+# 2. script brings down the faulty link if number of active links in internal portchannel > configured min_links
+check program intLinkMonit with path "/usr/bin/internal_links_monitor.py"
+    every 3 cycles
+    if status != 0 for 2 cycle then alert repeat every 1 cycles
+
 # Check if /etc & /home are writable. If not, make them writable.
 # Raise syslog error message, in case of underlying issues
 #
