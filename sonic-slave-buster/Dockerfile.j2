@@ -494,6 +494,9 @@ ENV PATH /usr/share/depot_tools:$PATH
 RUN pip3 install parameterized==0.8.1
 RUN pip3 install pyfakefs
 
+# Install dependencies for sonic-utilities.response.typing-extensions
+RUN pip3 install typing-extensions==4.7.1
+
 # Install docker engine 17.03.2~ce-0 inside docker and enable experimental feature
 RUN apt-get update
 RUN apt-get install -y \
