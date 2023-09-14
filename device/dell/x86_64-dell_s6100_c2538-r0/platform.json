@@ -11,10 +11,10 @@
                 "name": "BIOS"
             },
             {
-                "name": "CPLD"
+                "name": "FPGA"
             },
             {
-                "name": "FPGA"
+                "name": "CPLD"
             },
             {
                 "name": "SSD"
