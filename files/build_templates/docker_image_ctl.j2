@@ -126,6 +126,10 @@ function postStartAction()
                     $SONIC_CFGGEN -j /etc/sonic/config_db$DEV.json --write-to-db
                 fi
             fi
+            if [[ "$BOOT_TYPE" == "fast" ]]; then
+                # set the key to expire in 3 minutes
+                $SONIC_DB_CLI STATE_DB SET "FAST_REBOOT|system" "1" "EX" "180"
+            fi
         fi
 
         if [ -e /tmp/pending_config_migration ] || [ -e /tmp/pending_config_initialization ]; then
