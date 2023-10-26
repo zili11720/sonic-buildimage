@@ -3,11 +3,10 @@ include $(PLATFORM_PATH)/sai-modules.dep
 include $(PLATFORM_PATH)/sai.dep
 # TODO: re-enable once the following have been updated for bookworm:
 # * Nokia
-# * Dell
 # * Juniper
 # * Ragile
 include $(PLATFORM_PATH)/platform-modules-s6000.dep
-#include $(PLATFORM_PATH)/platform-modules-dell.dep
+include $(PLATFORM_PATH)/platform-modules-dell.dep
 include $(PLATFORM_PATH)/platform-modules-arista.dep
 include $(PLATFORM_PATH)/platform-modules-ingrasys.dep
 include $(PLATFORM_PATH)/platform-modules-accton.dep
