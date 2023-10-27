@@ -51,7 +51,7 @@ def check_process_existence(container_name, process_cmdline):
 
             for process in psutil.process_iter(["cmdline", "status", "pid"]):
                 try:
-                    if ((' '.join(process.cmdline())).startswith(process_cmdline) and process.status() in ["running", "sleeping"]):
+                    if ((' '.join(process.cmdline())).startswith(process_cmdline) and process.status() in ["running", "sleeping", "disk-sleep"]):
                          process_namespace_found_set.add(multi_asic.get_current_namespace(process.info['pid']))
                 except psutil.NoSuchProcess:
                     pass
@@ -72,10 +72,6 @@ def check_process_existence(container_name, process_cmdline):
                              namespace_display_str += ", " + ns
 
                  join_str = " and" if host_display_str and namespace_display_str else ""
-                 
-                 # If this script is run by Monit, then the following output will be appended to
-                 # Monit's syslog message.
-                 print("'{}' is not running{}{}{}".format(process_cmdline, host_display_str, join_str, namespace_display_str))
                  sys.exit(1)
     else:
         syslog.syslog(syslog.LOG_ERR, "container '{}' is not included in SONiC image or the given container name is invalid!"
