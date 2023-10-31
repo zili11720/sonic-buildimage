@@ -3,7 +3,6 @@ include $(PLATFORM_PATH)/sai.mk
 # TODO: re-enable once the following have been updated for bookworm:
 # * Nokia
 # * Dell
-# * Accton
 # * Juniper
 # * Ragile
 # * Ufispace
@@ -11,7 +10,7 @@ include $(PLATFORM_PATH)/sai.mk
 #include $(PLATFORM_PATH)/platform-modules-dell.mk
 include $(PLATFORM_PATH)/platform-modules-arista.mk
 #include $(PLATFORM_PATH)/platform-modules-ingrasys.mk
-#include $(PLATFORM_PATH)/platform-modules-accton.mk
+include $(PLATFORM_PATH)/platform-modules-accton.mk
 include $(PLATFORM_PATH)/platform-modules-alphanetworks.mk
 #include $(PLATFORM_PATH)/platform-modules-inventec.mk
 include $(PLATFORM_PATH)/platform-modules-cel.mk
