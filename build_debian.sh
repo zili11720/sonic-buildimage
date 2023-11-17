@@ -398,6 +398,7 @@ sudo LANG=C DEBIAN_FRONTEND=noninteractive chroot $FILESYSTEM_ROOT apt-get -y in
     resolvconf              \
 	lsof                    \
 	sysstat                 \
+	xxd                     \
 	zstd
 
 # Have systemd create the auditd log directory
