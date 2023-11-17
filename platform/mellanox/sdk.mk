@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-MLNX_SDK_VERSION = 4.6.1062
+MLNX_SDK_VERSION = 4.6.2104
 MLNX_SDK_ISSU_VERSION = 101
 
 MLNX_SDK_DRIVERS_GITHUB_URL = https://github.com/Mellanox/Spectrum-SDK-Drivers
@@ -152,12 +152,11 @@ ifeq ($(SDK_FROM_SRC),y)
 $(eval $(call add_derived_package,$(SX_HASH_CALC),$(SX_HASH_CALC_DBGSYM)))
 endif
 
-# TODO: enable for bookworm
-#SX_KERNEL = sx-kernel_1.mlnx.$(MLNX_SDK_DEB_VERSION)_$(CONFIGURED_ARCH).deb
-#$(SX_KERNEL)_DEPENDS += $(LINUX_HEADERS) $(LINUX_HEADERS_COMMON)
-#$(SX_KERNEL)_SRC_PATH = $(PLATFORM_PATH)/sdk-src/sx-kernel
-#SX_KERNEL_DEV = sx-kernel-dev_1.mlnx.$(MLNX_SDK_DEB_VERSION)_$(CONFIGURED_ARCH).deb
-#$(eval $(call add_derived_package,$(SX_KERNEL),$(SX_KERNEL_DEV)))
+SX_KERNEL = sx-kernel_1.mlnx.$(MLNX_SDK_DEB_VERSION)_$(CONFIGURED_ARCH).deb
+$(SX_KERNEL)_DEPENDS += $(LINUX_HEADERS) $(LINUX_HEADERS_COMMON)
+$(SX_KERNEL)_SRC_PATH = $(PLATFORM_PATH)/sdk-src/sx-kernel
+SX_KERNEL_DEV = sx-kernel-dev_1.mlnx.$(MLNX_SDK_DEB_VERSION)_$(CONFIGURED_ARCH).deb
+$(eval $(call add_derived_package,$(SX_KERNEL),$(SX_KERNEL_DEV)))
 
 define make_url
 	$(1)_URL = $(MLNX_SDK_ASSETS_URL)/$(1)
