@@ -12,7 +12,7 @@ endif
 # Place an URL here to .tar.gz file if you want to include those patches
 EXTERNAL_KERNEL_PATCH_URL =
 # Set y to include non upstream patches tarball provided by the corresponding platform
-INCLUDE_EXTERNAL_PATCHES = n
+INCLUDE_EXTERNAL_PATCHES ?= n
 # platforms should override this and provide an absolute location to the patches
 EXTERNAL_KERNEL_PATCH_LOC =
 
