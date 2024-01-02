@@ -5,7 +5,8 @@ from common_utils import MockSubscribeTable, get_subscribe_table_tested_data, \
 from dhcp_utilities.common.dhcp_db_monitor import DhcpRelaydDbMonitor, DhcpServdDbMonitor, ConfigDbEventChecker, \
     DhcpServerTableIntfEnablementEventChecker, DhcpServerTableCfgChangeEventChecker, \
     DhcpPortTableEventChecker, DhcpRangeTableEventChecker, DhcpOptionTableEventChecker, \
-    VlanTableEventChecker, VlanMemberTableEventChecker, VlanIntfTableEventChecker, DhcpServerFeatureStateChecker
+    VlanTableEventChecker, VlanMemberTableEventChecker, VlanIntfTableEventChecker, DhcpServerFeatureStateChecker, \
+    MidPlaneTableEventChecker, DpusTableEventChecker
 from dhcp_utilities.common.utils import DhcpDbConnector
 from swsscommon import swsscommon
 from unittest.mock import patch, ANY, PropertyMock, MagicMock
@@ -365,4 +366,38 @@ def test_feature_table_checker(mock_swsscommon_dbconnector_init, tested_data, te
         else:
             expected_res = tested_data["exp_res"]["pre_enabled"] if tested_db_snapshot["dhcp_server_feature_enabled"] \
                 else tested_data["exp_res"]["pre_disabled"]
+            assert expected_res == check_res
+
+
+@pytest.mark.parametrize("tested_db_snapshot", [{"enabled_dhcp_interfaces": {"bridge_midplane": ["dpu0"]}}, {}])
+@pytest.mark.parametrize("tested_data", get_subscribe_table_tested_data("test_mid_plane_update"))
+def test_mid_plane_table_checker(mock_swsscommon_dbconnector_init, tested_data, tested_db_snapshot):
+    with patch.object(ConfigDbEventChecker, "enable"), \
+         patch.object(ConfigDbEventChecker, "subscriber_state_table",
+                      return_value=MockSubscribeTable(tested_data["table"]), new_callable=PropertyMock), \
+         patch.object(sys, "exit"):
+        sel = swsscommon.Select()
+        db_event_checker = MidPlaneTableEventChecker(sel, MagicMock())
+        expected_res = tested_data["exp_res"]
+        check_res = db_event_checker.check_update_event(tested_db_snapshot)
+        if "enabled_dhcp_interfaces" not in tested_db_snapshot:
+            assert check_res
+        else:
+            assert expected_res == check_res
+
+
+@pytest.mark.parametrize("tested_db_snapshot", [{"enabled_dhcp_interfaces": {"bridge_midplane": ["dpu0"]}}, {}])
+@pytest.mark.parametrize("tested_data", get_subscribe_table_tested_data("test_dpus_update"))
+def test_dpus_table_checker(mock_swsscommon_dbconnector_init, tested_data, tested_db_snapshot):
+    with patch.object(ConfigDbEventChecker, "enable"), \
+         patch.object(ConfigDbEventChecker, "subscriber_state_table",
+                      return_value=MockSubscribeTable(tested_data["table"]), new_callable=PropertyMock), \
+         patch.object(sys, "exit"):
+        sel = swsscommon.Select()
+        db_event_checker = DpusTableEventChecker(sel, MagicMock())
+        expected_res = tested_data["exp_res"]
+        check_res = db_event_checker.check_update_event(tested_db_snapshot)
+        if "enabled_dhcp_interfaces" not in tested_db_snapshot:
+            assert check_res
+        else:
             assert expected_res == check_res
