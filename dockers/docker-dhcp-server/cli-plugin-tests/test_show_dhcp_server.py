@@ -113,8 +113,9 @@ range3   100.1.1.10  100.1.1.10           1
     def test_show_dhcp_server_ipv4_info_without_intf(self, mock_db):
         expected_stdout = """\
 Interface    Mode    Gateway    Netmask          Lease Time(s)  State
------------  ------  ---------  -------------  ---------------  -------
+-----------  ------  ---------  -------------  ---------------  --------
 Vlan100      PORT    100.1.1.1  255.255.255.0             3600  enabled
+Vlan300      PORT    100.1.1.1  255.255.255.0             3600  disabled
 """
         runner = CliRunner()
         db = clicommon.Db()
