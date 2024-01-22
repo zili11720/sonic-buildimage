@@ -70,7 +70,7 @@ class DhcpServCfgGenerator(object):
         # Parse dpu
         dpus_table = self.db_connector.get_config_db_table(DPUS)
         mid_plane_table = self.db_connector.get_config_db_table(MID_PLANE_BRIDGE)
-        mid_plane, dpus = self._parse_dpu(dpus_table, mid_plane_table) if smart_switch else {}, {}
+        mid_plane, dpus = self._parse_dpu(dpus_table, mid_plane_table) if smart_switch else ({}, {})
 
         dhcp_server_ipv4, customized_options_ipv4, range_ipv4, port_ipv4 = self._get_dhcp_ipv4_tables_from_db()
         # Parse range table
