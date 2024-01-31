@@ -81,7 +81,11 @@ stages:
     value: veos_vtb
   - name: testbed_file
     value: vtestbed.csv
-
+  - name: BUILD_BRANCH
+    ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+      value: $(System.PullRequest.TargetBranch)
+    ${{ else }}:
+      value: $(Build.SourceBranchName)
 # For every test job:
 # continueOnError: false means it's a required test job and will block merge if it fails
 # continueOnError: true means it's an optional test job and will not block merge even though it fails(unless a required test job depends on its result)
@@ -153,7 +157,7 @@ stages:
         TOPOLOGY: t0
         MIN_WORKER: $(T0_INSTANCE_NUM)
         MAX_WORKER: $(T0_INSTANCE_NUM)
-        MGMT_BRANCH: "master"
+        MGMT_BRANCH: $(BUILD_BRANCH)
         SPECIFIC_PARAM: '[{"name": "telemetry/test_telemetry.py", "param": "--deselect=telemetry/test_telemetry.py::test_on_change_updates"}]'
 
   - job: t0_2vlans_elastictest
@@ -168,7 +172,7 @@ stages:
         TEST_SET: t0-2vlans
         MIN_WORKER: $(T0_2VLANS_INSTANCE_NUM)
         MAX_WORKER: $(T0_2VLANS_INSTANCE_NUM)
-        MGMT_BRANCH: "master"
+        MGMT_BRANCH: $(BUILD_BRANCH)
         DEPLOY_MG_EXTRA_PARAMS: "-e vlan_config=two_vlan_a"
 
   - job: t1_lag_elastictest
@@ -182,7 +186,7 @@ stages:
         TOPOLOGY: t1-lag
         MIN_WORKER: $(T1_LAG_INSTANCE_NUM)
         MAX_WORKER: $(T1_LAG_INSTANCE_NUM)
-        MGMT_BRANCH: "master"
+        MGMT_BRANCH: $(BUILD_BRANCH)
 
   - job: multi_asic_elastictest
     pool: ubuntu-20.04
@@ -197,7 +201,7 @@ stages:
           MIN_WORKER: $(MULTI_ASIC_INSTANCE_NUM)
           MAX_WORKER: $(MULTI_ASIC_INSTANCE_NUM)
           NUM_ASIC: 4
-          MGMT_BRANCH: "master"
+          MGMT_BRANCH: $(BUILD_BRANCH)
 
   - job: dualtor_elastictest
     pool: ubuntu-20.04
@@ -210,7 +214,7 @@ stages:
           TOPOLOGY: dualtor
           MIN_WORKER: $(T0_DUALTOR_INSTANCE_NUM)
           MAX_WORKER: $(T0_DUALTOR_INSTANCE_NUM)
-          MGMT_BRANCH: "master"
+          MGMT_BRANCH: $(BUILD_BRANCH)
           COMMON_EXTRA_PARAMS: "--disable_loganalyzer "
 
   - job: sonic_t0_elastictest
@@ -225,7 +229,7 @@ stages:
           MIN_WORKER: $(T0_SONIC_INSTANCE_NUM)
           MAX_WORKER: $(T0_SONIC_INSTANCE_NUM)
           TEST_SET: t0-sonic
-          MGMT_BRANCH: "master"
+          MGMT_BRANCH: $(BUILD_BRANCH)
           COMMON_EXTRA_PARAMS: "--neighbor_type=sonic "
           VM_TYPE: vsonic
           SCRIPTS_EXCLUDE: "platform_tests/test_advanced_reboot.py::test_warm_reboot"
