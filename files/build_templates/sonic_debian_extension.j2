@@ -494,6 +494,7 @@ sudo tee $FILESYSTEM_ROOT_ETC/systemd/bootchart.conf > /dev/null <<EOF
 [Bootchart]
 Samples=4500
 Frequency=25
+Cmdline=yes
 EOF
 {% if enable_bootchart == 'y' %}
 sudo LANG=C chroot $FILESYSTEM_ROOT systemctl enable systemd-bootchart
