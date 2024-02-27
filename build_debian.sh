@@ -377,7 +377,6 @@ sudo LANG=C DEBIAN_FRONTEND=noninteractive chroot $FILESYSTEM_ROOT apt-get -y in
     mtr-tiny                \
     locales                 \
     cgroup-tools            \
-    ipmitool                \
     ndisc6                  \
     makedumpfile            \
     conntrack               \
