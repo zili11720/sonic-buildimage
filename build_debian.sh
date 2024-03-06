@@ -273,7 +273,7 @@ install_kubernetes () {
     local ver="$1"
     sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT curl -fsSL \
         https://packages.cloud.google.com/apt/doc/apt-key.gpg | \
-        sudo LANG=C chroot $FILESYSTEM_ROOT apt-key add -
+        sudo LANG=C chroot $FILESYSTEM_ROOT tee /etc/apt/trusted.gpg.d/kubernetes.asc
     ## Check out the sources list update matches current Debian version
     sudo cp files/image_config/kubernetes/kubernetes.list $FILESYSTEM_ROOT/etc/apt/sources.list.d/
     sudo LANG=C chroot $FILESYSTEM_ROOT apt-get update
