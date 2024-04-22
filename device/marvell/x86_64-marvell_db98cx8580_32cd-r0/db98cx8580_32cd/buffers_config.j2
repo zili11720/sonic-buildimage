@@ -9,9 +9,9 @@ def
 {# Determine device topology and filename postfix #}
 {%- if DEVICE_METADATA is defined %}
 {%-     set switch_role = DEVICE_METADATA['localhost']['type'] %}
-{%-     if 'torrouter' in switch_role.lower() %}
+{%-     if switch_role.lower() == 'torrouter' %}
 {%-         set filename_postfix = 't0' %}
-{%-     elif 'leafrouter' in switch_role.lower() %}
+{%-     elif switch_role.lower() == 'leafrouter' %}
 {%-         set filename_postfix = 't1' %}
 {%-     else %}
 {%-         set filename_postfix = set_default_topology() %}
@@ -62,7 +62,7 @@ def
     {%- if cable_len -%}
         {{ cable_len.0 }}
     {%- else %}
-        {%- if 'torrouter' in switch_role.lower() %}
+        {%- if switch_role.lower() == 'torrouter' %}
             {%- for local_port in VLAN_MEMBER %}
                 {%- if local_port[1] == port_name %}
                     {%- set roles3 = switch_role + '_' + 'server' %}
@@ -133,7 +133,7 @@ def
     "BUFFER_PG": {
 {% for port in PORT_ACTIVE %}
         "{{ port }}|0": {
-            "profile" : "ingress_lossy_profile"
+            "profile" : "[BUFFER_PROFILE|ingress_lossy_profile]"
         }{% if not loop.last %},{% endif %}
 
 {% endfor %}
@@ -146,17 +146,17 @@ def
     "BUFFER_QUEUE": {
 {% for port in PORT_ACTIVE %}
         "{{ port }}|3-4": {
-            "profile" : "egress_lossless_profile"
+            "profile" : "[BUFFER_PROFILE|egress_lossless_profile]"
         },
 {% endfor %}
 {% for port in PORT_ACTIVE %}
         "{{ port }}|0-2": {
-            "profile" : "egress_lossy_profile"
+            "profile" : "[BUFFER_PROFILE|egress_lossy_profile]"
         },
 {% endfor %}
 {% for port in PORT_ACTIVE %}
         "{{ port }}|5-6": {
-            "profile" : "egress_lossy_profile"
+            "profile" : "[BUFFER_PROFILE|egress_lossy_profile]"
         }{% if not loop.last %},{% endif %}
 
 {% endfor %}
