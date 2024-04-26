@@ -182,7 +182,7 @@ tested_parsed_port = {
 expected_render_obj = {
     "subnets": [
         {
-            "subnet": "192.168.0.0/21",
+            "subnet": "192.168.0.0/21", 'id': '1000',
             "pools": [{"range": "192.168.0.2 - 192.168.0.6", "client_class": "sonic-host:etp8"},
                       {"range": "192.168.0.10 - 192.168.0.10", "client_class": "sonic-host:etp8"},
                       {"range": "192.168.0.7 - 192.168.0.7", "client_class": "sonic-host:etp7"}],
