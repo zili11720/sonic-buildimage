@@ -177,6 +177,7 @@ class DhcpServCfgGenerator(object):
                                                                                                 client_class)
                             })
                     subnet_obj = {
+                        "id": dhcp_interface_name.replace("Vlan", ""),
                         "subnet": str(ipaddress.ip_network(dhcp_interface_ip, strict=False)),
                         "pools": pools,
                         "gateway": dhcp_config["gateway"],
