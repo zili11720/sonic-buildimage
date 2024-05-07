@@ -160,6 +160,7 @@ setup(
                          './yang-models/sonic-routing-policy-sets.yang',
                          './yang-models/sonic-sflow.yang',
                          './yang-models/sonic-snmp.yang',
+                         './yang-models/sonic-suppress-asic-sdk-health-event.yang',
                          './yang-models/sonic-syslog.yang',
                          './yang-models/sonic-system-aaa.yang',
                          './yang-models/sonic-system-tacacs.yang',
