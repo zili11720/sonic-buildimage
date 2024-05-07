@@ -1038,6 +1038,8 @@ sudo LANG=C chroot $FILESYSTEM_ROOT systemctl enable nv-syncd-shared
 
 # Install minicom package
 sudo LANG=C DEBIAN_FRONTEND=noninteractive chroot $FILESYSTEM_ROOT apt-get -y install minicom
+
+sudo LANG=C chroot $FILESYSTEM_ROOT systemctl disable rshim.service
 {% endif %}
 
 {% if sonic_asic_platform == "nvidia-bluefield" %}

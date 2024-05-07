@@ -428,6 +428,7 @@ RUN apt-get update && apt-get install -y \
         rpm2cpio \
         libsnmp-dev \
         libpopt-dev \
+        libfuse-dev \
 {%- if CONFIGURED_ARCH == "arm64" %}
         grub-efi-arm64-bin \
 {%- endif %}
