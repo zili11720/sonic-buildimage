@@ -384,6 +384,7 @@ util-linux-extra==2.38.1-5+deb12u1
 vim==2:9.0.1378-2
 vim-common==2:9.0.1378-2
 vim-runtime==2:9.0.1378-2
+wireless-regdb==2022.06.06-1
 x11-common==1:7.7+23
 xml-core==0.18+nmu1
 xxd==2:9.0.1378-2

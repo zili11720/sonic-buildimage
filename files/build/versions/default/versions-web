@@ -14,7 +14,7 @@ http://deb.debian.org/debian/pool/main/l/lm-sensors/lm-sensors_3.6.0.orig.tar.gz
 http://deb.debian.org/debian/pool/main/p/protobuf/protobuf_3.21.12-3.debian.tar.xz==f457e44218a7d4cc7b7ab0ed696096e3
 http://deb.debian.org/debian/pool/main/p/protobuf/protobuf_3.21.12-3.dsc==d8e34e7b07473c6903f9d245934524fb
 http://deb.debian.org/debian/pool/main/p/protobuf/protobuf_3.21.12.orig.tar.gz==d38562490234d8080bdbe8eb7baf937a
-http://www.iana.org/assignments/enterprise-numbers.txt==1ab53990feba6e1917592d0b085740ff
+http://www.iana.org/assignments/enterprise-numbers.txt==a34d6d99898f7230f1bc9c8087923818
 http://www.mellanox.com/downloads/MFT/mft-4.27.0-83-x86_64-deb.tgz==e475ca87a9252ba8d0abb6b05d5d94d0
 https://archive.apache.org/dist/thrift/0.14.1/thrift-0.14.1.tar.gz==c64434548438df2cb1e53fb27c600e85
 https://bootstrap.pypa.io/pip/2.7/get-pip.py==60e8267eb1b7bc71dc4843eb7bd294d3

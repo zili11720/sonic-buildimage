@@ -80,7 +80,7 @@ pyangbind==0.8.2
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pyelftools==0.29
-pyfakefs==5.4.1
+pyfakefs==5.5.0
 pygments==2.14.0
 pygobject==3.42.2
 pyhamcrest==2.0.3
