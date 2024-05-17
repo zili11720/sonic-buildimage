@@ -250,7 +250,6 @@ ifeq ($(SONIC_ENABLE_BOOTCHART),y)
 ENABLE_BOOTCHART = y
 endif
 
-
 ifeq ($(ENABLE_ASAN),y)
 ifneq ($(CONFIGURED_ARCH),amd64)
 $(Q)echo "Disabling SWSS address sanitizer due to incompatible CPU architecture: $(CONFIGURED_ARCH)"

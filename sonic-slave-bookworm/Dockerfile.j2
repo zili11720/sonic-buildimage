@@ -447,6 +447,34 @@ RUN apt-get update && apt-get install -y \
         hwdata \
         libzip-dev
 
+{%- if CONFIGURED_ARCH != "arm64" and CONFIGURED_ARCH != "armhf" %}
+RUN apt-get update && apt-get install -y \
+# For p4 libraries
+        libgrpc++-dev \
+        libgrpc-dev \
+        libprotoc-dev \
+        protobuf-compiler-grpc \
+        valgrind \
+        python3-protobuf \
+        python3-grpcio \
+        thrift-compiler \
+        gfortran \
+        libopenmpi-dev \
+        libthrift-0.17.0 \
+        libthrift-dev \
+        libboost-all-dev \
+        libboost-graph-dev \
+        libboost-iostreams-dev \
+        libgc-dev \
+        tcpdump \
+        llvm \
+        net-tools \
+        python3-pyroute2 \
+        python3-ply \
+        python3-scapy \
+        python3-thrift
+{%- endif %}
+
 {%- if CROSS_BUILD_ENVIRON == "y" %}
 # Arm vs. amd64 versions conflict - remove amd64 packages
 RUN apt-get remove -y libnl-3-200
@@ -505,6 +533,9 @@ RUN patch -p1 -i /disable-non-manylinux.patch /usr/local/lib/python3.11/dist-pac
 
 # For building sonic-utilities
 RUN pip3 install fastentrypoints mock
+
+# For DASH BMv2
+RUN pip3 install jsonpath_ng
 
 # For building sonic_ycabled
 # Note: Match version in bookworm
