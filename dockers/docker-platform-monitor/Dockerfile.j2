@@ -27,9 +27,10 @@ RUN apt-get update &&   \
         iputils-ping    \
         pciutils        \
         nvme-cli        \
-        ethtool &&	\
+        ethtool
+
 # smartmontools version should match the installed smartmontools in sonic_debian_extension build template
-    apt-get install -y -t bookworm-backports \
+RUN apt-get install -y -t bookworm-backports \
         smartmontools
 
 # On Arista devices, the sonic_platform wheel is not installed in the container.

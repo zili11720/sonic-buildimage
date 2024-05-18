@@ -406,6 +406,7 @@ sudo LANG=C DEBIAN_FRONTEND=noninteractive chroot $FILESYSTEM_ROOT apt-get -y in
     sysstat                 \
     xxd                     \
     wireless-regdb          \
+    ethtool                 \
     zstd                    \
     nvme-cli
 
