@@ -18,6 +18,6 @@ https://github.com/sflow/host-sflow==6edc82d62a1cf0f7fb821587af67e5520624f50d
 https://github.com/sflow/sflowtool==c42c49cb80b927a4c02e54fc26430417f18f4833
 https://github.com/thom311/libnl==49f7822961f5bc6b18cd2a2d3f3b8d2ab0896d3f
 https://salsa.debian.org/debian/libteam.git==48142125234a665ad5367b724af36a58fb484d3d
-https://salsa.debian.org/kernel-team/initramfs-tools.git==15311e6282434f184fb306c38d415f2217239214
+https://salsa.debian.org/kernel-team/initramfs-tools.git==3436c177b9f362de9687a3afb1b3c7273899db80
 https://salsa.debian.org/sk-guest/monit.git==c9da7ebb1f35dfba17b50b5969a6e75e29cbec0d
 https://salsa.debian.org/ssh-team/openssh.git==d150d0d69246f55c711684078f47f999a4bfd6bc
