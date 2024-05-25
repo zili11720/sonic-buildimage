@@ -375,7 +375,6 @@ libc-ares2==1.17.1-1+deb11u3
 libc-dev-bin==2.31-13+deb11u10
 libc-devtools==2.31-13+deb11u10
 libc-l10n==2.31-13+deb11u10
-libc6==2.31-13+deb11u10
 libc6-dbg==2.31-13+deb11u10
 libc6-dev==2.31-13+deb11u10
 libc6-dev-i386==2.31-13+deb11u10

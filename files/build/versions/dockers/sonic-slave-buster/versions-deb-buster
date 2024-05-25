@@ -343,7 +343,6 @@ libc-ares-dev==1.14.0-1+deb10u4
 libc-ares2==1.14.0-1+deb10u4
 libc-dev-bin==2.28-10+deb10u3
 libc-l10n==2.28-10+deb10u3
-libc6==2.28-10+deb10u3
 libc6-dbg==2.28-10+deb10u3
 libc6-dev==2.28-10+deb10u3
 libc6-dev-i386==2.28-10+deb10u3
