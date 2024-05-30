@@ -46,7 +46,7 @@ variables:
 
 stages:
 - stage: BuildVS
-  pool: sonicbld
+  pool: sonicbld-1es
   jobs:
   - template: .azure-pipelines/azure-pipelines-build.yml
     parameters:
@@ -55,7 +55,7 @@ stages:
       - name: vs
 
 - stage: Build
-  pool: sonicbld
+  pool: sonicbld-1es
   dependsOn: []
   jobs:
   - template: .azure-pipelines/azure-pipelines-build.yml
@@ -147,7 +147,7 @@ stages:
         testRunTitle: vstest
 
   - job: t0_elastictest
-    pool: ubuntu-20.04
+    pool: sonic-ubuntu-1c
     displayName: "kvmtest-t0 by Elastictest"
     timeoutInMinutes: 240
     continueOnError: false
@@ -161,7 +161,7 @@ stages:
         SPECIFIC_PARAM: '[{"name": "telemetry/test_telemetry.py", "param": "--deselect=telemetry/test_telemetry.py::test_on_change_updates"}]'
 
   - job: t0_2vlans_elastictest
-    pool: ubuntu-20.04
+    pool: sonic-ubuntu-1c
     displayName: "kvmtest-t0-2vlans by Elastictest"
     timeoutInMinutes: 240
     continueOnError: false
@@ -176,7 +176,7 @@ stages:
         DEPLOY_MG_EXTRA_PARAMS: "-e vlan_config=two_vlan_a"
 
   - job: t1_lag_elastictest
-    pool: ubuntu-20.04
+    pool: sonic-ubuntu-1c
     displayName: "kvmtest-t1-lag by Elastictest"
     timeoutInMinutes: 240
     continueOnError: false
@@ -189,7 +189,7 @@ stages:
         MGMT_BRANCH: $(BUILD_BRANCH)
 
   - job: multi_asic_elastictest
-    pool: ubuntu-20.04
+    pool: sonic-ubuntu-1c
     displayName: "kvmtest-multi-asic-t1-lag by Elastictest"
     timeoutInMinutes: 240
     continueOnError: false
@@ -204,7 +204,7 @@ stages:
           MGMT_BRANCH: $(BUILD_BRANCH)
 
   - job: dualtor_elastictest
-    pool: ubuntu-20.04
+    pool: sonic-ubuntu-1c
     displayName: "kvmtest-dualtor-t0 by Elastictest"
     timeoutInMinutes: 240
     continueOnError: false
@@ -218,7 +218,7 @@ stages:
           COMMON_EXTRA_PARAMS: "--disable_loganalyzer "
 
   - job: sonic_t0_elastictest
-    pool: ubuntu-20.04
+    pool: sonic-ubuntu-1c
     displayName: "kvmtest-t0-sonic by Elastictest"
     timeoutInMinutes: 240
     continueOnError: false
@@ -235,7 +235,7 @@ stages:
           SCRIPTS_EXCLUDE: "platform_tests/test_advanced_reboot.py::test_warm_reboot"
 
 #  - job: wan_elastictest
-#    pool: ubuntu-20.04
+#    pool: sonic-ubuntu-1c
 #    displayName: "kvmtest-wan by Elastictest"
 #    timeoutInMinutes: 1080
 #    continueOnError: false
