@@ -71,7 +71,7 @@ ipython3==5.8.0-1+deb10u1
 iso-codes==4.2-1
 javascript-common==11
 krb5-locales==1.17-3+deb10u6
-less==487-0.1+b1
+less==487-0.1+deb10u1
 libalgorithm-diff-perl==1.19.03-2
 libalgorithm-diff-xs-perl==0.04-5+b1
 libalgorithm-merge-perl==0.08-3

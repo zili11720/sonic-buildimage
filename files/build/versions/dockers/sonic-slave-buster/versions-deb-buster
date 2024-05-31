@@ -210,7 +210,7 @@ kmod==26-1
 krb5-locales==1.17-3+deb10u6
 krb5-multidev==1.17-3+deb10u6
 lcov==1.13-4
-less==487-0.1+b1
+less==487-0.1+deb10u1
 lib32asan5==8.3.0-6
 lib32atomic1==8.3.0-6
 lib32gcc-8-dev==8.3.0-6
@@ -292,7 +292,7 @@ libbinutils==2.31.1-16
 libbison-dev==2:3.3.2.dfsg-1
 libbit-vector-perl==7.4-1+b5
 libblkid-dev==2.33.1-0.1+deb10u1
-libbluetooth3==5.50-1.2~deb10u4
+libbluetooth3==5.50-1.2~deb10u5
 libbluray2==1:1.1.0-1+deb10u1
 libboost-atomic1.71-dev==1.71.0-6~bpo10+1
 libboost-atomic1.71.0==1.71.0-6~bpo10+1

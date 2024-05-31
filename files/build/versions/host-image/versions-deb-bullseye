@@ -67,7 +67,7 @@ grub2-common==2.06-3~deb11u6
 haveged==1.9.14-1
 hdparm==9.60+ds-1
 hping3==3.a2.ds2-10
-hw-management==1.mlnx.7.0030.2008
+hw-management==1.mlnx.7.0030.4002
 i2c-tools==4.2-1+b1
 ifmetric==0.3-5
 ifupdown2==3.0.0-1
@@ -94,6 +94,9 @@ libasan6==10.2.1-6
 libassuan0==2.5.3-7.1
 libatomic1==10.2.1-6
 libauparse0==1:3.0-2
+libavahi-client3==0.8-5+deb11u2
+libavahi-common-data==0.8-5+deb11u2
+libavahi-common3==0.8-5+deb11u2
 libbabeltrace1==1.5.8-1+b3
 libbinutils==2.35.2-2
 libblkid-dev==2.36.1-8+deb11u2
@@ -151,6 +154,9 @@ libgrpc10==1.30.2-3
 libhavege2==1.9.14-1
 libhiredis0.14==0.14.1-1
 libi2c0==4.2-1+b1
+libicu67==67.1-7
+libiio-utils==0.21-2+b1
+libiio0==0.21-2+b1
 libiniparser1==4.1-4
 libip4tc2==1.8.7-1
 libip6tc2==1.8.7-1
@@ -222,6 +228,7 @@ libsasl2-2==2.1.27+dfsg-2.1+deb11u1
 libsasl2-modules-db==2.1.27+dfsg-2.1+deb11u1
 libsensors-config==1:3.6.0-7
 libsensors5==1:3.6.0-7
+libserialport0==0.1.1-4
 libslang2==2.3.2-5
 libsmartcols1==2.36.1-8+deb11u2
 libsodium23==1.0.18-1
@@ -241,6 +248,7 @@ libusb-1.0-0==2:1.0.24-3
 libutempter0==1.2.1-2
 libuuid1==2.36.1-8+deb11u2
 libwrap0==7.6.q-31
+libxml2==2.9.10+dfsg-6.7+deb11u4
 libxtables12==1.8.7-1
 libyaml-0-2==0.2.2-1
 libyang==1.0.73
