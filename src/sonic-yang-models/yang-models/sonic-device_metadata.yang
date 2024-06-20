@@ -230,6 +230,15 @@ module sonic-device_metadata {
                                  otherwise the maximum available buffers (which are read from SAI) will be
                                  created, regardless of the CONFIG_DB buffers configuration.";
                 }
+
+                leaf suppress-fib-pending {
+                    type stypes:admin_mode;
+                    default disabled;
+                    description "Enable BGP suppress FIB pending feature. BGP will wait for route FIB installation before announcing routes";
+                    must "((current() = 'disabled') or (current() = 'enabled' and ../synchronous_mode = 'enable'))" {
+                        error-message "ASIC synchronous mode must be enabled in order to enable suppress FIB pending feature";
+                    }
+                }
             }
             /* end of container localhost */
         }
