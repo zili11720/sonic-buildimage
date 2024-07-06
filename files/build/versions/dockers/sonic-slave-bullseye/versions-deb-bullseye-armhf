@@ -1,3 +1,4 @@
+base-files==11.1+deb11u10
 binutils-arm-linux-gnueabihf==2.35.2-2
 dctrl-tools==2.24-3
 dvipng==1.15-1.1
