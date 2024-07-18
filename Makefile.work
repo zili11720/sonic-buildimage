@@ -71,7 +71,11 @@ SHELL = /bin/bash
 USER := $(shell id -un)
 PWD := $(shell pwd)
 USER_LC := $(shell echo $(USER) | tr A-Z a-z)
+ifneq ($(DEFAULT_CONTAINER_REGISTRY),)
+DOCKER_MACHINE := $(shell docker run --rm $(DEFAULT_CONTAINER_REGISTRY)/debian:buster uname -m)
+else
 DOCKER_MACHINE := $(shell docker run --rm debian:buster uname -m)
+endif
 
 comma := ,
 
@@ -282,7 +286,7 @@ endif
 DOCKER_LOCKFILE_SAVE := $(DOCKER_LOCKDIR)/docker_save.lock
 $(shell mkdir -m 0777 -p $(DOCKER_LOCKDIR))
 $(shell [ -f $(DOCKER_LOCKFILE_SAVE) ] || (touch $(DOCKER_LOCKFILE_SAVE) && chmod 0777 $(DOCKER_LOCKFILE_SAVE)))
-$(shell [ -d $(DOCKER_ROOT) ] && docker run --rm -v $(DOCKER_ROOT)\:/mount debian sh -c 'rm -rf /mount/*')
+$(shell [ -d $(DOCKER_ROOT) ] && docker run --rm -v $(DOCKER_ROOT)\:/mount $(DEFAULT_CONTAINER_REGISTRY)debian sh -c 'rm -rf /mount/*')
 $(mkdir -p $(DOCKER_ROOT))
 
 ifeq ($(DOCKER_BUILDER_MOUNT),)
@@ -401,7 +405,7 @@ endif
     #Override Native config to prevent docker service
     SONIC_CONFIG_USE_NATIVE_DOCKERD_FOR_BUILD=y
 
-    DOCKER_MULTIARCH_CHECK := docker run --rm --privileged multiarch/qemu-user-static --reset -p yes --credential yes
+    DOCKER_MULTIARCH_CHECK := docker run --rm --privileged $(DEFAULT_CONTAINER_REGISTRY)multiarch/qemu-user-static --reset -p yes --credential yes
 
     DOCKER_SERVICE_SAFE_KILLER :=  (MARCH_PID=`ps -eo pid,cmd | grep "[0-9] dockerd.*march" | awk '{print $$1}'`; echo "Killing march docker $$MARCH_PID"; [ -z "$$MARCH_PID" ] || sudo kill -9 "$$MARCH_PID";)
     DOCKER_SERVICE_MULTIARCH_CHECK := ($(DOCKER_SERVICE_SAFE_KILLER); sudo rm -fr /var/run/march/; (echo "Starting docker march service..."; sudo $(SONIC_NATIVE_DOCKERD_FOR_MULTIARCH) &) &>/dev/null ; sleep 2; sudo $(SONIC_USERFACL_DOCKERD_FOR_MULTIARCH);)
