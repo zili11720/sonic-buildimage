@@ -18,8 +18,10 @@
 import glob
 import os
 import time
+import re
 
 from . import utils
+from sonic_py_common.general import check_output_pipe
 
 DEFAULT_WD_PERIOD = 65535
 
@@ -172,6 +174,13 @@ class DeviceDataManager:
     def is_simx_platform(cls):
         platform_name = cls.get_platform_name()
         return platform_name and 'simx' in platform_name
+
+    @classmethod
+    @utils.read_only_cache()
+    def get_simx_version(cls):
+        version = check_output_pipe(["lspci", "-vv"], ["grep", "SimX"])
+        parsed_version = re.search("([0-9]+\\.[0-9]+-[0-9]+)", version)
+        return parsed_version.group(1) if parsed_version else "N/A"
 
     @classmethod
     @utils.read_only_cache()
