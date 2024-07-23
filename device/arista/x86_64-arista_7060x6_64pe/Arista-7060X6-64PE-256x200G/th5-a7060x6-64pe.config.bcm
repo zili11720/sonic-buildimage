@@ -2461,7 +2461,7 @@ device:
             :
                 MIN_GUARANTEE_CELLS: 74
                 DYNAMIC_SHARED_LIMITS: 1
-                SHARED_LIMIT_DYNAMIC: ALPHA_1_4
+                SHARED_LIMIT_DYNAMIC: ALPHA_1
                 RESUME_OFFSET_CELLS: 14
                 RESUME_FLOOR_CELLS: 0
                 HEADROOM_LIMIT_AUTO: 0
@@ -2472,7 +2472,7 @@ device:
             :
                 MIN_GUARANTEE_CELLS: 74
                 DYNAMIC_SHARED_LIMITS: 1
-                SHARED_LIMIT_DYNAMIC: ALPHA_1_4
+                SHARED_LIMIT_DYNAMIC: ALPHA_1
                 RESUME_OFFSET_CELLS: 14
                 RESUME_FLOOR_CELLS: 0
                 HEADROOM_LIMIT_AUTO: 0
@@ -2483,7 +2483,7 @@ device:
             :
                 MIN_GUARANTEE_CELLS: 0
                 DYNAMIC_SHARED_LIMITS: 1
-                SHARED_LIMIT_DYNAMIC: ALPHA_1_4
+                SHARED_LIMIT_DYNAMIC: ALPHA_1
                 RESUME_OFFSET_CELLS: 0
                 RESUME_FLOOR_CELLS: 0
                 HEADROOM_LIMIT_AUTO: 0
@@ -2494,7 +2494,7 @@ device:
             :
                 MIN_GUARANTEE_CELLS: 0
                 DYNAMIC_SHARED_LIMITS: 1
-                SHARED_LIMIT_DYNAMIC: ALPHA_1_4
+                SHARED_LIMIT_DYNAMIC: ALPHA_1
                 RESUME_OFFSET_CELLS: 0
                 RESUME_FLOOR_CELLS: 0
                 HEADROOM_LIMIT_AUTO: 0
