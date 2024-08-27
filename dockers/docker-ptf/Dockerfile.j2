@@ -96,6 +96,7 @@ RUN rm -rf /debs \
     && rm -fr scapy-vxlan \
     && git clone https://github.com/sflow/sflowtool \
     && cd sflowtool \
+    && git checkout v6.04 \
     && ./boot.sh \
     && ./configure \
     && make \
