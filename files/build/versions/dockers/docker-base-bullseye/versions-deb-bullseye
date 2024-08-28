@@ -21,7 +21,7 @@ libgdbm6==1.19-2
 libjansson4==2.13.1-1.1
 libjemalloc2==5.2.1-3
 libjq1==1.6-2.1
-libk5crypto3==1.18.3-6+deb11u4+fips
+libk5crypto3==1.18.3-6+deb11u5+fips
 libldap-2.4-2==2.4.57+dfsg-3+deb11u1
 liblognorm5==2.0.5-1.1
 liblua5.1-0==5.1.5-8.1+b3
