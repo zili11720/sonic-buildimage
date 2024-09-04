@@ -25,7 +25,6 @@ paramiko==2.11.0
 pexpect==4.8.0
 prefixed==0.7.0
 prettyprinter==0.18.0
-psutil==6.0.0
 ptyprocess==0.7.0
 pycairo==1.24.0
 pycparser==2.21
