@@ -102,7 +102,7 @@ interface ignore wildcard
     {%- set ns.source_intf = global.src_intf %}
     {%- if ns.source_intf != "" %}
         {%- if ns.source_intf == "eth0" %}
-            {%- set ns.source_intf_ip = 'true' %}
+            {%- set ns.source_intf_ip = check_ip_on_interface(ns.source_intf, MGMT_INTERFACE) %}
         {%- elif ns.source_intf.startswith('Vlan') %}
             {%- set ns.source_intf_ip = check_ip_on_interface(ns.source_intf, VLAN_INTERFACE) %}
         {%- elif ns.source_intf.startswith('Ethernet') %}
