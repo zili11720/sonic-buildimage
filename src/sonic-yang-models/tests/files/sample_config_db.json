@@ -377,7 +377,8 @@
                 "timezone": "Europe/Kiev",
                 "bgp_router_id": "8.8.8.8",
                 "chassis_hostname": "str-sonic-chassis-1",
-                "slice_type": "AZNG_Production"
+                "slice_type": "AZNG_Production",
+                "nexthop_group": "disabled"
             }
         },
         "VLAN": {
