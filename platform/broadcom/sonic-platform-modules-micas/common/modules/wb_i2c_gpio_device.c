@@ -64,7 +64,7 @@ static void i2c_gpio_release(struct device *dev)
 }
 
 static struct platform_device wb_i2c_gpio_device = {
-    .name       = "wb-i2c-gpio",
+    .name       = "i2c-gpio",
     .id     = -1,
     .num_resources  = 0,
     .resource   = NULL,
@@ -78,7 +78,7 @@ static struct platform_device wb_i2c_gpio_device = {
  * i2c
  */
 static struct gpiod_lookup_table wb_i2c_gpio_table = {
-    .dev_id = "wb-i2c-gpio",
+    .dev_id = "i2c-gpio",
     .table = {
         GPIO_LOOKUP("wb_gpio_d1500", 17, "sda",
                 GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN),
@@ -104,7 +104,7 @@ static int __init wb_i2c_gpio_device_init(void)
 
     if (bus_num >= 0) {
         wb_i2c_gpio_device.id = bus_num;
-        snprintf(i2c_gpio_dev_name, I2C_GPIO_DEV_NAME_LEN, "wb-i2c-gpio.%d", bus_num);
+        snprintf(i2c_gpio_dev_name, I2C_GPIO_DEV_NAME_LEN, "i2c-gpio.%d", bus_num);
         wb_i2c_gpio_table.dev_id = i2c_gpio_dev_name;
     }
 

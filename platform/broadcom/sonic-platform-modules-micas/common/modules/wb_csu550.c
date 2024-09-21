@@ -13,7 +13,7 @@
 #include <linux/mutex.h>
 #include <linux/i2c.h>
 #include <linux/pmbus.h>
-#include "wb_pmbus.h"
+#include "pmbus.h"
 
 struct pmbus_device_info {
     int pages;
@@ -31,54 +31,56 @@ static void pmbus_find_sensor_groups(struct i2c_client *client,
     int page;
 
     /* Sensors detected on page 0 only */
-    if (wb_pmbus_check_word_register(client, 0, PMBUS_READ_VIN))
+    if (pmbus_check_word_register(client, 0, PMBUS_READ_VIN))
         info->func[0] |= PMBUS_HAVE_VIN;
-    if (wb_pmbus_check_word_register(client, 0, PMBUS_READ_IIN))
+    if (pmbus_check_word_register(client, 0, PMBUS_READ_VCAP))
+        info->func[0] |= PMBUS_HAVE_VCAP;
+    if (pmbus_check_word_register(client, 0, PMBUS_READ_IIN))
         info->func[0] |= PMBUS_HAVE_IIN;
-    if (wb_pmbus_check_word_register(client, 0, PMBUS_READ_PIN))
+    if (pmbus_check_word_register(client, 0, PMBUS_READ_PIN))
         info->func[0] |= PMBUS_HAVE_PIN;
     if (info->func[0]
-        && wb_pmbus_check_byte_register(client, 0, PMBUS_STATUS_INPUT))
+        && pmbus_check_byte_register(client, 0, PMBUS_STATUS_INPUT))
         info->func[0] |= PMBUS_HAVE_STATUS_INPUT;
-    if (wb_pmbus_check_byte_register(client, 0, PMBUS_FAN_CONFIG_12) &&
-        wb_pmbus_check_word_register(client, 0, PMBUS_READ_FAN_SPEED_1)) {
+    if (pmbus_check_byte_register(client, 0, PMBUS_FAN_CONFIG_12) &&
+        pmbus_check_word_register(client, 0, PMBUS_READ_FAN_SPEED_1)) {
         info->func[0] |= PMBUS_HAVE_FAN12;
-        if (wb_pmbus_check_byte_register(client, 0, PMBUS_STATUS_FAN_12))
+        if (pmbus_check_byte_register(client, 0, PMBUS_STATUS_FAN_12))
             info->func[0] |= PMBUS_HAVE_STATUS_FAN12;
     }
-    if (wb_pmbus_check_byte_register(client, 0, PMBUS_FAN_CONFIG_34) &&
-        wb_pmbus_check_word_register(client, 0, PMBUS_READ_FAN_SPEED_3)) {
+    if (pmbus_check_byte_register(client, 0, PMBUS_FAN_CONFIG_34) &&
+        pmbus_check_word_register(client, 0, PMBUS_READ_FAN_SPEED_3)) {
         info->func[0] |= PMBUS_HAVE_FAN34;
-        if (wb_pmbus_check_byte_register(client, 0, PMBUS_STATUS_FAN_34))
+        if (pmbus_check_byte_register(client, 0, PMBUS_STATUS_FAN_34))
             info->func[0] |= PMBUS_HAVE_STATUS_FAN34;
     }
-    if (wb_pmbus_check_word_register(client, 0, PMBUS_READ_TEMPERATURE_1))
+    if (pmbus_check_word_register(client, 0, PMBUS_READ_TEMPERATURE_1))
         info->func[0] |= PMBUS_HAVE_TEMP;
-    if (wb_pmbus_check_word_register(client, 0, PMBUS_READ_TEMPERATURE_2))
+    if (pmbus_check_word_register(client, 0, PMBUS_READ_TEMPERATURE_2))
         info->func[0] |= PMBUS_HAVE_TEMP2;
-    if (wb_pmbus_check_word_register(client, 0, PMBUS_READ_TEMPERATURE_3))
+    if (pmbus_check_word_register(client, 0, PMBUS_READ_TEMPERATURE_3))
         info->func[0] |= PMBUS_HAVE_TEMP3;
     if (info->func[0] & (PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2
                  | PMBUS_HAVE_TEMP3)
-        && wb_pmbus_check_byte_register(client, 0,
+        && pmbus_check_byte_register(client, 0,
                      PMBUS_STATUS_TEMPERATURE))
             info->func[0] |= PMBUS_HAVE_STATUS_TEMP;
 
     /* Sensors detected on all pages */
     for (page = 0; page < info->pages; page++) {
-        if (wb_pmbus_check_word_register(client, page, PMBUS_READ_VOUT)) {
+        if (pmbus_check_word_register(client, page, PMBUS_READ_VOUT)) {
             info->func[page] |= PMBUS_HAVE_VOUT;
-            if (wb_pmbus_check_byte_register(client, page,
+            if (pmbus_check_byte_register(client, page,
                               PMBUS_STATUS_VOUT))
                 info->func[page] |= PMBUS_HAVE_STATUS_VOUT;
         }
-        if (wb_pmbus_check_word_register(client, page, PMBUS_READ_IOUT)) {
+        if (pmbus_check_word_register(client, page, PMBUS_READ_IOUT)) {
             info->func[page] |= PMBUS_HAVE_IOUT;
-            if (wb_pmbus_check_byte_register(client, 0,
+            if (pmbus_check_byte_register(client, 0,
                               PMBUS_STATUS_IOUT))
                 info->func[page] |= PMBUS_HAVE_STATUS_IOUT;
         }
-        if (wb_pmbus_check_word_register(client, page, PMBUS_READ_POUT))
+        if (pmbus_check_word_register(client, page, PMBUS_READ_POUT))
             info->func[page] |= PMBUS_HAVE_POUT;
     }
 }
@@ -98,26 +100,26 @@ static int pmbus_identify(struct i2c_client *client,
          * maximum number of pages has been reached. Assume that
          * this is the number of pages supported by the chip.
          */
-        if (wb_pmbus_check_byte_register(client, 0, PMBUS_PAGE)) {
+        if (pmbus_check_byte_register(client, 0, PMBUS_PAGE)) {
             int page;
 
             for (page = 1; page < PMBUS_PAGES; page++) {
-                if (wb_pmbus_set_page(client, page, 0xff) < 0)
+                if (pmbus_set_page(client, page, 0xff) < 0)
                     break;
             }
-            wb_pmbus_set_page(client, 0, 0xff);
+            pmbus_set_page(client, 0, 0xff);
             info->pages = page;
         } else {
             info->pages = 1;
         }
 
-        wb_pmbus_clear_faults(client);
+        pmbus_clear_faults(client);
     }
 
-    if (wb_pmbus_check_byte_register(client, 0, PMBUS_VOUT_MODE)) {
+    if (pmbus_check_byte_register(client, 0, PMBUS_VOUT_MODE)) {
         int vout_mode, i;
 
-        vout_mode = wb_pmbus_read_byte_data(client, 0, PMBUS_VOUT_MODE);
+        vout_mode = pmbus_read_byte_data(client, 0, PMBUS_VOUT_MODE);
         if (vout_mode >= 0 && vout_mode != 0xff) {
             switch (vout_mode >> 5) {
             case 0:
@@ -184,7 +186,7 @@ static int pmbus_probe(struct i2c_client *client)
     info->identify = pmbus_identify;
     dev->platform_data = pdata;
 
-    return wb_pmbus_do_probe(client, info);
+    return pmbus_do_probe(client, info);
 }
 
 static const struct pmbus_device_info pmbus_info_one = {
@@ -225,7 +227,6 @@ static struct i2c_driver pmbus_driver = {
            .name = "wb_pmbus",
            },
     .probe_new = pmbus_probe,
-    .remove = wb_pmbus_do_remove,
     .id_table = pmbus_id,
 };
 
@@ -234,3 +235,4 @@ module_i2c_driver(pmbus_driver);
 MODULE_AUTHOR("support");
 MODULE_DESCRIPTION("Generic PMBus driver");
 MODULE_LICENSE("GPL");
+MODULE_IMPORT_NS(PMBUS);
