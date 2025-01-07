@@ -86,7 +86,6 @@
 [submodule "src/sonic-restapi"]
 	path = src/sonic-restapi
 	url = https://github.com/sonic-net/sonic-restapi.git
-	branch = master
   branch = 202411
 [submodule "src/sonic-mgmt-common"]
 	path = src/sonic-mgmt-common
