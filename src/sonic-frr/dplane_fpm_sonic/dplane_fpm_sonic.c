@@ -80,6 +80,12 @@ DEFAULT_SRV6_LOCALSID_FORMAT_NODE_LEN = 16;
 DEFAULT_SRV6_LOCALSID_FORMAT_FUNCTION_LEN = 16;
 DEFAULT_SRV6_LOCALSID_FORMAT_ARGUMENT_LEN = 0;
 
+/*
+ * Time in seconds that if the other end is not responding
+ * something terrible has gone wrong.  Let's fix that.
+ */
+#define DPLANE_FPM_NL_WEDGIE_TIME 15
+
 /**
  * Custom Netlink TLVs
 */
@@ -194,6 +200,7 @@ struct fpm_nl_ctx {
 	struct event *t_event;
 	struct event *t_nhg;
 	struct event *t_dequeue;
+	struct event *t_wedged;
 
 	/* zebra events. */
 	struct event *t_lspreset;
@@ -2801,6 +2808,18 @@ static void fpm_rmac_reset(struct event *t)
 			 &fnc->t_rmacwalk);
 }
 
+static void fpm_process_wedged(struct event *t)
+{
+	struct fpm_nl_ctx *fnc = EVENT_ARG(t);
+
+	zlog_warn("%s: Connection unable to write to peer for over %u seconds, resetting",
+		  __func__, DPLANE_FPM_NL_WEDGIE_TIME);
+
+	atomic_fetch_add_explicit(&fnc->counters.connection_errors, 1,
+				  memory_order_relaxed);
+	FPM_RECONNECT(fnc);
+}
+
 static void fpm_process_queue(struct event *t)
 {
 	struct fpm_nl_ctx *fnc = EVENT_ARG(t);
@@ -2843,9 +2862,13 @@ static void fpm_process_queue(struct event *t)
 				  processed_contexts, memory_order_relaxed);
 
 	/* Re-schedule if we ran out of buffer space */
-	if (no_bufs)
-		event_add_timer(fnc->fthread->master, fpm_process_queue,
-				 fnc, 0, &fnc->t_dequeue);
+	if (no_bufs) {
+		event_add_timer(fnc->fthread->master, fpm_process_queue, fnc, 0,
+				&fnc->t_dequeue);
+		event_add_timer(fnc->fthread->master, fpm_process_wedged, fnc,
+				DPLANE_FPM_NL_WEDGIE_TIME, &fnc->t_wedged);
+	} else
+		EVENT_OFF(fnc->t_wedged);
 
 	/*
 	 * Let the dataplane thread know if there are items in the
