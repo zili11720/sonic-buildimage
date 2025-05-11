@@ -30,5 +30,5 @@
 0030-staticd-Avoid-requesting-SRv6-sid-from-zebra-when-loc-and-sid-block-dont-match.patch
 0031-isisd-fix-srv6-sid-memory-leak.patch
 0032-show-ipv6-route-json-displays-seg6local-flavors.patch
-0033-staticd–Install-known-nexthops-upon-connection-with-zebra.patch
+0033-staticd-Install-known-nexthops-upon-connection-with-zebra.patch
 0034-staticd-Fix-an-issue-where-SRv6-SIDs-may-not-be-allocated-on-heavily-loaded-systems.patch
