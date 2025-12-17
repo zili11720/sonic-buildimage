@@ -2844,7 +2844,8 @@ Single tunnel example:
     "VXLAN_TUNNEL": {
         "vtep1": {
             "src_ip": "10.10.10.10",
-            "dst_ip": "12.12.12.12"
+            "dst_ip": "12.12.12.12",
+            "ttl_mode": "pipe"
         }
     },
     "VXLAN_TUNNEL_MAP": {
@@ -2871,7 +2872,8 @@ Dual tunnel example:
     "VXLAN_TUNNEL": {
         "vtep1": {
             "src_ip": "10.10.10.10",
-            "dst_ip": "12.12.12.12"
+            "dst_ip": "12.12.12.12",
+            "ttl_mode": "uniform"
         },
         "vtep2": {
             "src_ip": "10.20.10.10",
