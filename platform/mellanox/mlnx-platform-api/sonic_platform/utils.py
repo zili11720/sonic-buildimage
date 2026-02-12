@@ -305,6 +305,7 @@ def extract_cpo_ports_index(num_of_asics=1):
     return _extract_ports_index_by_type(CPO_PORT_TYPE, num_of_asics)
 
 
+# Use this function only for files that have user read permission.
 def wait_for_file_creation(file_path, timeout):
     """
     Wait for a file to be created using inotify
@@ -314,7 +315,7 @@ def wait_for_file_creation(file_path, timeout):
         timeout: Timeout in seconds
 
     Returns:
-        True if file was created and is readable, False otherwise
+        True if file was created/copied from a temporary file, and is readable, False otherwise
     """
     # If file already exists and is readable, return immediately
     if os.access(file_path, os.R_OK):
@@ -330,9 +331,9 @@ def wait_for_file_creation(file_path, timeout):
     try:
         notifier = inotify.adapters.Inotify()
         notifier.add_watch(dir_path,
-                         mask=(inotify.constants.IN_CREATE
-                               | inotify.constants.IN_CLOSE_WRITE
-                               | inotify.constants.IN_MOVED_TO))
+                           mask=(inotify.constants.IN_CREATE
+                                 | inotify.constants.IN_CLOSE_WRITE
+                                 | inotify.constants.IN_MOVED_TO))
 
         for event in notifier.event_gen(timeout_s=timeout, yield_nones=False):
             (_, type_names, path, filename) = event
@@ -341,6 +342,7 @@ def wait_for_file_creation(file_path, timeout):
                     if os.access(file_path, os.R_OK):
                         logger.log_info("File {} created and readable".format(file_path))
                         return True
+
     except Exception as e:
         logger.log_error("Inotify error while waiting for {}: {}".format(file_path, repr(e)))
 
