@@ -1070,7 +1070,7 @@ class Chassis(ChassisBase):
                 logger.log_info("VPD data file {} not accessible, waiting for creation".format(filename))
                 if not utils.wait_for_file_creation(filename, VPD_DATA_WAIT_TIMEOUT):
                     logger.log_error("VPD data file {} not available after timeout".format(filename))
-                return result
+                    return result
 
             result = utils.read_key_value_file(filename, delimeter=": ")
                 
