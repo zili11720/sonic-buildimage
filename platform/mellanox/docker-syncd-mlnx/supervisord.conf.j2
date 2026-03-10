@@ -46,11 +46,11 @@ dependent_startup_wait_for=rsyslogd:running
 environment=ASAN_OPTIONS="log_path=/var/log/asan/syncd-asan.log{{ asan_extra_options }}"
 {% endif %}
 
-[program:phcsync]
-command=/usr/bin/phcsync.sh
+[program:phcsync-gate]
+command=/usr/bin/phcsync_warm_reboot_gate.py
 priority=3
 autostart=false
-autorestart=false
+autorestart=unexpected
 stdout_logfile=syslog
 stderr_logfile=syslog
 dependent_startup=true
