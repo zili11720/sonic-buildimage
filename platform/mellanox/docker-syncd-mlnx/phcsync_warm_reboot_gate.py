@@ -4,8 +4,8 @@
 # Copyright (c) 2025-2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 #
-# Gate process: runs phcsync.sh as a child and pauses (SIGSTOP) / resumes (SIGCONT)
-# when warm reboot is detected. Uses swsscommon RestartWaiter (event-driven, no DB polling).
+# Gate process: runs phcsync.sh as a child and pauses / resumes when warm reboot is detected.
+# Uses swsscommon RestartWaiter (event-driven, no DB polling).
 #
 
 import os
@@ -80,7 +80,7 @@ def main():
         except ChildProcessError:
             break
 
-        log("Warm reboot started, pausing phcsync (SIGSTOP)")
+        log("Warm reboot started, pausing phcsync")
         try:
             os.kill(pid, signal.SIGSTOP)
         except ProcessLookupError:
@@ -95,7 +95,7 @@ def main():
         except ProcessLookupError:
             log("phcsync process gone while paused, exiting", syslog.LOG_WARNING)
             return 2
-        log("Warm reboot done, resumed phcsync (SIGCONT)")
+        log("Warm reboot done, resumed phcsync")
 
     return 2
 
