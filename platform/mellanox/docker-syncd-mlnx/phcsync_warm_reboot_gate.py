@@ -62,11 +62,11 @@ def main():
         log("Failed to start %s: %s" % (PHCSYNC_SCRIPT, e), syslog.LOG_ERR)
         return 1
 
-    log("Started phcsync (pid %d), listening for warm reboot" % child_proc.pid, syslog.LOG_INFO)
+    log("Started phcsync (pid %d), listening for warm reboot" % child_proc.pid)
 
     while True:
         if not RestartWaiter.waitWarmBootStarted(maxWaitSec=WARM_BOOT_STARTED_TIMEOUT_SEC):
-            log("waitWarmBootStarted timed out, continuing loop", syslog.LOG_INFO)
+            log("waitWarmBootStarted timed out, continuing loop")
             continue
 
         pid = child_proc.pid
