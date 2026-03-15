@@ -21,10 +21,10 @@ except ImportError:
     sys.exit(1)
 
 PHCSYNC_SCRIPT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "phcsync.sh")
-# Timeouts match RestartWaiter defaults, omitting these would yield the same behavior.
+# 24h timeout match RestartWaiter default, omitting this would yield the same behavior.
 # Defined here for readability.
 WARM_BOOT_STARTED_TIMEOUT_SEC = 86400  # 24h
-WARM_BOOT_DONE_TIMEOUT_SEC = 180
+WARM_BOOT_DONE_TIMEOUT_SEC = 240 # 4m
 
 _child_proc = None
 
