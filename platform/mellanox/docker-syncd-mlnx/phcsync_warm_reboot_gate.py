@@ -112,9 +112,10 @@ def main():
         except ProcessLookupError:
             log("phcsync process gone while trying to resume, exiting", syslog.LOG_WARNING)
             return 2
-        log("Warm reboot done, resumed phcsync")
+        log("Warm reboot done or timed out, resumed phcsync")
 
     # The main loop is expected to run indefinitely, reaching here means unexpected termination.
+    log("Unexpected termination, exiting", syslog.LOG_WARNING)
     return 2
 
 
