@@ -4,6 +4,7 @@ EXIT_TELEMETRY_VARS_FILE_NOT_FOUND=1
 INCORRECT_TELEMETRY_VALUE=2
 INVALID_LISTENER_MODE=3
 SOCKET_DIRECTORY_ERROR=4
+INVALID_TLS_CONFIGURATION=5
 TELEMETRY_VARS_FILE=/usr/share/sonic/templates/telemetry_vars.j2
 ESCAPE_QUOTE="'\''"
 
@@ -56,13 +57,13 @@ export CVL_SCHEMA_PATH=/usr/sbin/schema
 if [[ "$DPU_EPHEMERAL_TLS" == "true" ]]; then
     TELEMETRY_ARGS+=" --insecure"
 elif [ -n "$CERTS" ]; then
-    SERVER_CRT=$(extract_field "$CERTS" '.server_crt')
-    SERVER_KEY=$(extract_field "$CERTS" '.server_key')
-    if [ -z $SERVER_CRT  ] || [ -z $SERVER_KEY  ]; then
-        TELEMETRY_ARGS+=" --insecure"
-    else
-        TELEMETRY_ARGS+=" --server_crt $SERVER_CRT --server_key $SERVER_KEY "
+    SERVER_CRT=$(extract_field "$CERTS" '.server_crt // empty')
+    SERVER_KEY=$(extract_field "$CERTS" '.server_key // empty')
+    if [[ -z "$SERVER_CRT" || -z "$SERVER_KEY" ]]; then
+        echo "TLS configuration requires both server_crt and server_key" >&2
+        exit $INVALID_TLS_CONFIGURATION
     fi
+    TELEMETRY_ARGS+=" --server_crt $SERVER_CRT --server_key $SERVER_KEY "
 
     CA_CRT=$(extract_field "$CERTS" '.ca_crt')
     if [ ! -z $CA_CRT ]; then
@@ -70,13 +71,13 @@ elif [ -n "$CERTS" ]; then
     fi
 
 elif [ -n "$X509" ]; then
-    SERVER_CRT=$(extract_field "$X509" '.server_crt')
-    SERVER_KEY=$(extract_field "$X509" '.server_key')
-    if [ -z $SERVER_CRT  ] || [ -z $SERVER_KEY  ]; then
-        TELEMETRY_ARGS+=" --insecure"
-    else
-        TELEMETRY_ARGS+=" --server_crt $SERVER_CRT --server_key $SERVER_KEY "
+    SERVER_CRT=$(extract_field "$X509" '.server_crt // empty')
+    SERVER_KEY=$(extract_field "$X509" '.server_key // empty')
+    if [[ -z "$SERVER_CRT" || -z "$SERVER_KEY" ]]; then
+        echo "TLS configuration requires both server_crt and server_key" >&2
+        exit $INVALID_TLS_CONFIGURATION
     fi
+    TELEMETRY_ARGS+=" --server_crt $SERVER_CRT --server_key $SERVER_KEY "
 
     CA_CRT=$(extract_field "$X509" '.ca_crt')
     if [ ! -z $CA_CRT ]; then
